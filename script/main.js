@@ -1,306 +1,771 @@
-// Animation Timeline
+// ======================================================
+// Birthday Project - Enhanced Animation
+// ======================================================
+
+
+// ======================================================
+// Load Customization
+// ======================================================
+
+const fetchData = () => {
+
+  const cacheBuster = "?v=" + Date.now();
+
+  return fetch("customize.json" + cacheBuster)
+
+    .then(response => {
+
+      if (!response.ok) {
+        throw new Error(
+          "Unable to load customize.json. Status: " +
+          response.status
+        );
+      }
+
+      return response.json();
+    })
+
+    .then(data => {
+
+      console.log("Customization loaded:", data);
+
+
+      if (data.name) {
+        document.getElementById("name").textContent =
+          data.name;
+      }
+
+
+      if (data.greetingText) {
+        document.getElementById("greetingText").textContent =
+          data.greetingText;
+      }
+
+
+      if (data.birthdayAnnouncement) {
+        document.getElementById("birthdayAnnouncement").textContent =
+          data.birthdayAnnouncement;
+      }
+
+
+      if (data.chatMessage) {
+        document.getElementById("chatMessage").textContent =
+          data.chatMessage;
+      }
+
+
+      if (data.idea1) {
+        document.getElementById("idea1").textContent =
+          data.idea1;
+      }
+
+
+      if (data.idea2) {
+        document.getElementById("idea2").textContent =
+          data.idea2;
+      }
+
+
+      if (data.idea3) {
+        document.getElementById("idea3").innerHTML =
+          data.idea3;
+      }
+
+
+      if (data.idea4) {
+        document.getElementById("idea4").textContent =
+          data.idea4;
+      }
+
+
+      if (data.idea5) {
+        document.getElementById("idea5").textContent =
+          data.idea5;
+      }
+
+
+      if (data.birthdayTitle) {
+        document.getElementById("birthdayTitle").textContent =
+          data.birthdayTitle;
+      }
+
+
+      if (data.wishText) {
+        document.getElementById("wishText").textContent =
+          data.wishText;
+      }
+
+
+      if (data.imagePath) {
+        document.getElementById("imagePath").src =
+          data.imagePath;
+      }
+
+
+      if (data.finalMessage) {
+        document.getElementById("finalMessage").textContent =
+          data.finalMessage;
+      }
+
+    });
+};
+
+
+// ======================================================
+// Create Floating Particles
+// ======================================================
+
+const createParticles = () => {
+
+  const particleContainer =
+    document.createElement("div");
+
+  particleContainer.className =
+    "floating-particles";
+
+  document.body.appendChild(
+    particleContainer
+  );
+
+
+  const symbols = [
+    "✦",
+    "♡",
+    "•",
+    "✧",
+    "♥"
+  ];
+
+
+  for (let i = 0; i < 30; i++) {
+
+    const particle =
+      document.createElement("span");
+
+    particle.innerHTML =
+      symbols[Math.floor(
+        Math.random() * symbols.length
+      )];
+
+    particle.style.position = "absolute";
+
+    particle.style.left =
+      Math.random() * 100 + "%";
+
+    particle.style.top =
+      Math.random() * 100 + "%";
+
+    particle.style.fontSize =
+      (8 + Math.random() * 18) + "px";
+
+    particle.style.opacity =
+      0.15 + Math.random() * 0.5;
+
+    particle.style.pointerEvents =
+      "none";
+
+    particleContainer.appendChild(
+      particle
+    );
+
+
+    TweenMax.to(
+      particle,
+      4 + Math.random() * 5,
+      {
+        y: -80 - Math.random() * 100,
+        x: -40 + Math.random() * 80,
+        rotation: 180 + Math.random() * 360,
+        repeat: -1,
+        yoyo: true,
+        ease: Power1.easeInOut,
+        delay: Math.random() * 4
+      }
+    );
+  }
+};
+
+
+// ======================================================
+// Main Animation
+// ======================================================
+
 const animationTimeline = () => {
-  // Spit chars that needs to be animated individually
-  const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
-  const hbd = document.getElementsByClassName("wish-hbd")[0];
 
-  textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-    .split("")
-    .join("</span><span>")}</span`;
+  const textBoxChars =
+    document.getElementById("chatMessage");
 
-  hbd.innerHTML = `<span>${hbd.innerHTML
-    .split("")
-    .join("</span><span>")}</span`;
+  const hbd =
+    document.getElementById("birthdayTitle");
+
+
+  // ----------------------------------------------------
+  // Split message into characters
+  // ----------------------------------------------------
+
+  textBoxChars.innerHTML =
+    "<span>" +
+    textBoxChars.innerHTML
+      .split("")
+      .join("</span><span>") +
+    "</span>";
+
+
+  // ----------------------------------------------------
+  // Split birthday title
+  // ----------------------------------------------------
+
+  hbd.innerHTML =
+    "<span>" +
+    hbd.innerHTML
+      .split("")
+      .join("</span><span>") +
+    "</span>";
+
 
   const ideaTextTrans = {
     opacity: 0,
-    y: -20,
-    rotationX: 5,
-    skewX: "15deg"
+    y: -30,
+    rotationX: 10,
+    skewX: "10deg"
   };
+
 
   const ideaTextTransLeave = {
     opacity: 0,
-    y: 20,
-    rotationY: 5,
-    skewX: "-15deg"
+    y: 30,
+    rotationY: 10,
+    skewX: "-10deg"
   };
 
-  const tl = new TimelineMax();
+
+  const tl =
+    new TimelineMax();
+
+
+  // ====================================================
+  // OPENING
+  // ====================================================
 
   tl
-    .to(".container", 0.1, {
-      visibility: "visible"
-    })
-    .from(".one", 0.7, {
-      opacity: 0,
-      y: 10
-    })
-    .from(".two", 0.4, {
-      opacity: 0,
-      y: 10
-    })
+
     .to(
+      ".container",
+      0.2,
+      {
+        visibility: "visible"
+      }
+    )
+
+    .from(
       ".one",
-      0.7,
+      1,
       {
         opacity: 0,
-        y: 10
+        y: 40,
+        scale: 0.9,
+        ease: Power3.easeOut
+      }
+    )
+
+    .from(
+      ".two",
+      0.8,
+      {
+        opacity: 0,
+        y: 20
+      },
+      "-=0.4"
+    )
+
+    .to(
+      ".one",
+      0.8,
+      {
+        opacity: 0,
+        y: -40,
+        scale: 1.05
       },
       "+=2.5"
     )
+
     .to(
       ".two",
-      0.7,
+      0.6,
       {
         opacity: 0,
-        y: 10
+        y: -20
       },
-      "-=1"
+      "-=0.6"
+    );
+
+
+  // ====================================================
+  // BIRTHDAY REVEAL
+  // ====================================================
+
+  tl
+
+    .from(
+      ".three",
+      1,
+      {
+        opacity: 0,
+        scale: 0.4,
+        rotation: -8,
+        ease: Elastic.easeOut.config(1, 0.5)
+      }
     )
-    .from(".three", 0.7, {
-      opacity: 0,
-      y: 10
-      // scale: 0.7
-    })
+
+    .to(
+      ".three",
+      0.15,
+      {
+        scale: 1.08
+      }
+    )
+
+    .to(
+      ".three",
+      0.15,
+      {
+        scale: 1
+      }
+    )
+
     .to(
       ".three",
       0.7,
       {
         opacity: 0,
-        y: 10
+        y: -40
       },
-      "+=2"
+      "+=1.7"
+    );
+
+
+  // ====================================================
+  // MESSAGE CARD
+  // ====================================================
+
+  tl
+
+    .from(
+      ".four",
+      0.9,
+      {
+        opacity: 0,
+        scale: 0.75,
+        y: 50,
+        ease: Back.easeOut.config(1.5)
+      }
     )
-    .from(".four", 0.7, {
-      scale: 0.2,
-      opacity: 0
-    })
-    .from(".fake-btn", 0.3, {
-      scale: 0.2,
-      opacity: 0
-    })
-    .staggerTo(
-      ".hbd-chatbox span",
+
+    .from(
+      ".fake-btn",
       0.5,
+      {
+        opacity: 0,
+        scale: 0
+      },
+      "-=0.4"
+    )
+
+    .staggerTo(
+      "#chatMessage span",
+      0.04,
       {
         visibility: "visible"
       },
-      0.05
+      0.025
     )
-    .to(".fake-btn", 0.1, {
-      backgroundColor: "rgb(127, 206, 248)"
-    })
+
+    .to(
+      ".fake-btn",
+      0.25,
+      {
+        scale: 1.1,
+        backgroundColor: "#ff8fab"
+      }
+    )
+
+    .to(
+      ".fake-btn",
+      0.2,
+      {
+        scale: 1
+      }
+    )
+
     .to(
       ".four",
+      0.7,
+      {
+        opacity: 0,
+        scale: 0.8,
+        y: -80
+      },
+      "+=1"
+    );
+
+
+  // ====================================================
+  // IDEAS
+  // ====================================================
+
+  tl
+
+    .from(
+      ".idea-1",
+      0.8,
+      ideaTextTrans
+    )
+
+    .to(
+      ".idea-1",
+      0.7,
+      ideaTextTransLeave,
+      "+=1.2"
+    )
+
+    .from(
+      ".idea-2",
+      0.8,
+      ideaTextTrans
+    )
+
+    .to(
+      ".idea-2",
+      0.7,
+      ideaTextTransLeave,
+      "+=1.2"
+    )
+
+    .from(
+      ".idea-3",
+      0.8,
+      ideaTextTrans
+    )
+
+    .to(
+      ".idea-3 strong",
       0.5,
       {
-        scale: 0.2,
-        opacity: 0,
-        y: -150
-      },
-      "+=0.7"
+        scale: 1.25,
+        backgroundColor: "#ff5c8a",
+        color: "#fff",
+        boxShadow:
+          "0 8px 25px rgba(255,92,138,0.3)"
+      }
     )
-    .from(".idea-1", 0.7, ideaTextTrans)
-    .to(".idea-1", 0.7, ideaTextTransLeave, "+=1.5")
-    .from(".idea-2", 0.7, ideaTextTrans)
-    .to(".idea-2", 0.7, ideaTextTransLeave, "+=1.5")
-    .from(".idea-3", 0.7, ideaTextTrans)
-    .to(".idea-3 strong", 0.5, {
-      scale: 1.2,
-      x: 10,
-      backgroundColor: "rgb(21, 161, 237)",
-      color: "#fff"
-    })
-    .to(".idea-3", 0.7, ideaTextTransLeave, "+=1.5")
-    .from(".idea-4", 0.7, ideaTextTrans)
-    .to(".idea-4", 0.7, ideaTextTransLeave, "+=1.5")
+
+    .to(
+      ".idea-3",
+      0.7,
+      ideaTextTransLeave,
+      "+=1.2"
+    )
+
+    .from(
+      ".idea-4",
+      0.8,
+      ideaTextTrans
+    )
+
+    .to(
+      ".idea-4",
+      0.7,
+      ideaTextTransLeave,
+      "+=1.2"
+    );
+
+
+  // ====================================================
+  // SPECIAL MOMENT
+  // ====================================================
+
+  tl
+
     .from(
       ".idea-5",
-      0.7,
+      1,
       {
-        rotationX: 15,
-        rotationZ: -10,
-        skewY: "-5deg",
-        y: 50,
-        z: 10,
-        opacity: 0
-      },
-      "+=0.5"
+        opacity: 0,
+        scale: 0.3,
+        rotation: -15,
+        y: 80,
+        ease: Elastic.easeOut.config(1, 0.5)
+      }
     )
+
     .to(
-      ".idea-5 span",
-      0.7,
+      ".idea-5",
+      0.5,
       {
-        rotation: 90,
-        x: 8
-      },
-      "+=0.4"
+        scale: 1.08
+      }
     )
+
+    .to(
+      ".idea-5",
+      0.5,
+      {
+        scale: 1
+      }
+    )
+
     .to(
       ".idea-5",
       0.7,
       {
-        scale: 0.2,
-        opacity: 0
+        opacity: 0,
+        scale: 0.3,
+        rotation: 10
       },
-      "+=2"
-    )
+      "+=1.5"
+    );
+
+
+  // ====================================================
+  // SO
+  // ====================================================
+
+  tl
+
     .staggerFrom(
       ".idea-6 span",
       0.8,
       {
         scale: 3,
         opacity: 0,
-        rotation: 15,
-        ease: Expo.easeOut
+        rotation: 20,
+        ease: Elastic.easeOut.config(1, 0.5)
       },
       0.2
     )
+
     .staggerTo(
       ".idea-6 span",
-      0.8,
+      0.7,
       {
-        scale: 3,
+        scale: 2.5,
         opacity: 0,
-        rotation: -15,
-        ease: Expo.easeOut
+        rotation: -20
       },
-      0.2,
-      "+=1"
-    )
+      0.15,
+      "+=0.8"
+    );
+
+
+  // ====================================================
+  // BALLOONS
+  // ====================================================
+
+  tl
+
     .staggerFromTo(
       ".baloons img",
-      2.5,
+      3,
       {
-        opacity: 0.9,
-        y: 1400
+        opacity: 0,
+        y: 1400,
+        rotation: -10
       },
       {
         opacity: 1,
-        y: -1000
+        y: -1000,
+        rotation: 10,
+        ease: Power1.easeOut
       },
-      0.2
-    )
+      0.15
+    );
+
+
+  // ====================================================
+  // PHOTO REVEAL
+  // ====================================================
+
+  tl
+
     .from(
-      ".lydia-dp",
-      0.5,
+      ".six",
+      1.2,
       {
-        scale: 3.5,
+        scale: 0.4,
         opacity: 0,
-        x: 25,
-        y: -25,
-        rotationZ: -45
-      },
-      "-=2"
-    )
-    .from(".hat", 0.5, {
-      x: -100,
-      y: 350,
-      rotation: -180,
-      opacity: 0
-    })
-    .staggerFrom(
-      ".wish-hbd span",
-      0.7,
-      {
-        opacity: 0,
-        y: -50,
-        // scale: 0.3,
-        rotation: 150,
-        skewX: "30deg",
+        y: 100,
+        rotationZ: -5,
         ease: Elastic.easeOut.config(1, 0.5)
       },
-      0.1
+      "-=1.8"
     )
-    .staggerFromTo(
-      ".wish-hbd span",
+
+    .from(
+      ".hat",
+      0.8,
+      {
+        x: -120,
+        y: -250,
+        rotation: -180,
+        opacity: 0,
+        ease: Back.easeOut.config(1.7)
+      },
+      "-=0.5"
+    );
+
+
+  // ====================================================
+  // BIRTHDAY TITLE
+  // ====================================================
+
+  tl
+
+    .staggerFrom(
+      "#birthdayTitle span",
       0.7,
       {
-        scale: 1.4,
-        rotationY: 150
+        opacity: 0,
+        y: -60,
+        rotation: 120,
+        scale: 0.4,
+        ease: Elastic.easeOut.config(1, 0.5)
+      },
+      0.07
+    )
+
+    .staggerFromTo(
+      "#birthdayTitle span",
+      0.6,
+      {
+        scale: 1.3
       },
       {
         scale: 1,
         rotationY: 0,
-        color: "#ff69b4",
         ease: Expo.easeOut
       },
-      0.1,
-      "party"
+      0.05,
+      "birthday"
     )
+
     .from(
-      ".wish h5",
-      0.5,
+      "#wishText",
+      0.8,
       {
         opacity: 0,
-        y: 10,
-        skewX: "-15deg"
+        y: 25,
+        skewX: "-10deg"
       },
-      "party"
-    )
+      "birthday+=0.2"
+    );
+
+
+  // ====================================================
+  // DECORATIVE PARTICLES
+  // ====================================================
+
+  tl
+
     .staggerTo(
       ".eight svg",
       1.5,
       {
         visibility: "visible",
         opacity: 0,
-        scale: 80,
-        repeat: 3,
-        repeatDelay: 1.4
+        scale: 60,
+        repeat: 2,
+        repeatDelay: 1
       },
-      0.3
+      0.2
+    );
+
+
+  // ====================================================
+  // FINAL SECTION
+  // ====================================================
+
+  tl
+
+    .to(
+      ".six",
+      0.8,
+      {
+        opacity: 0,
+        y: -40,
+        scale: 0.95,
+        visibility: "hidden"
+      }
     )
-    .to(".six", 0.5, {
-      opacity: 0,
-      y: 30,
-      zIndex: "-1"
-    })
-    .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
+
+    .staggerFrom(
+      ".nine > *",
+      1,
+      {
+        opacity: 0,
+        y: 30,
+        scale: 0.9
+      },
+      0.4
+    )
+
     .to(
       ".last-smile",
       0.5,
       {
-        rotation: 90
+        rotation: 90,
+        scale: 1.2
       },
-      "+=1"
+      "+=0.8"
     );
 
-  // tl.seek("currentStep");
-  // tl.timeScale(2);
 
-  // Restart Animation on click
-  const replyBtn = document.getElementById("replay");
-  replyBtn.addEventListener("click", () => {
-    tl.restart();
+  // ====================================================
+  // REPLAY
+  // ====================================================
+
+  const replayButton =
+    document.getElementById("replay");
+
+
+  if (replayButton) {
+
+    replayButton.addEventListener(
+      "click",
+      () => {
+
+        tl.restart();
+
+      }
+    );
+
+  }
+
+};
+
+
+// ======================================================
+// START
+// ======================================================
+
+fetchData()
+
+  .then(() => {
+
+    createParticles();
+
+    animationTimeline();
+
+  })
+
+  .catch(error => {
+
+    console.error(
+      "Customization loading failed:",
+      error
+    );
+
+    createParticles();
+
+    animationTimeline();
+
   });
-};
-
-// Import the data to customize and insert them into page
-const fetchData = () => {
-  fetch("customize.json")
-    .then(data => data.json())
-    .then(data => {
-      Object.keys(data).map(customData => {
-        if (data[customData] !== "") {
-          if (customData === "imagePath") {
-            document
-              .getElementById(customData)
-              .setAttribute("src", data[customData]);
-          } else {
-            document.getElementById(customData).innerText = data[customData];
-          }
-        }
-      });
-    });
-};
-
-// Run fetch and animation in sequence
-const resolveFetch = () => {
-  return new Promise((resolve, reject) => {
-    fetchData();
-    resolve("Fetch done!");
-  });
-};
-
-resolveFetch().then(animationTimeline());

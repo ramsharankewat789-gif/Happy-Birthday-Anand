@@ -1,6 +1,15 @@
 {
-  "name": "Damantha Jasinghe",
-  "greetingText": "I really like your name btw!",
-  "wishText": "May the js.prototypes always be with you! ;)",
-  "imagePath": "img/Damantha.png"
+  "name": "Anand",
+  "greetingText": "I have prepared something special for you!",
+  "birthdayAnnouncement": "It's your birthday!!!",
+  "chatMessage": "Happy Birthday, Anand! I hope your special day is filled with happiness, laughter, and beautiful memories.",
+  "idea1": "I wanted to do something special for you.",
+  "idea2": "So I started thinking about how to make your birthday memorable.",
+  "idea3": "And realised, I should do something <strong>special</strong>.",
+  "idea4": "Because,",
+  "idea5": "You are Special :)",
+  "birthdayTitle": "Happy birthday to you Anand!",
+  "wishText": "May all your wishes come true and may this year bring you happiness, success, and many beautiful memories!",
+  "imagePath": "img/0_f3c82958-b87c-4e82-ae27-aa2721787631_1757607876737_cn164k.jpg",
+  "finalMessage": "I hope you liked your little birthday surprise!"
 }

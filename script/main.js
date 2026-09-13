@@ -192,550 +192,127 @@ const createParticles = () => {
 
 const animationTimeline = () => {
 
-  const textBoxChars =
-    document.getElementById("chatMessage");
-
-  const hbd =
-    document.getElementById("birthdayTitle");
-
-
-  // ----------------------------------------------------
-  // Split message into characters
-  // ----------------------------------------------------
-
-  let chatText = textBoxChars.textContent.trim();
-  textBoxChars.innerHTML = chatText.split(" ").map(word => 
-    "<div style='display:inline-block;'>" + word.split("").map(c => "<span>" + c + "</span>").join("") + "</div>"
-  ).join(" ");
-
-
-  // ----------------------------------------------------
-  // Split birthday title
-  // ----------------------------------------------------
-
-  let hbdText = hbd.textContent.trim();
-  hbd.innerHTML = hbdText.split(" ").map(word => 
-    "<div style='display:inline-block;'>" + word.split("").map(c => "<span>" + c + "</span>").join("") + "</div>"
-  ).join(" ");
-
-
-  const ideaTextTrans = {
-    opacity: 0,
-    y: -30,
-    rotationX: 10,
-    skewX: "10deg"
+  // Universal typewriter setup
+  const setupTypewriter = (selector) => {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    const wrapTextNodes = (node) => {
+      if (node.nodeType === 3) { // Text node
+        const text = node.nodeValue;
+        if (text.trim() === '') return;
+        const fragment = document.createDocumentFragment();
+        const words = text.split(" ");
+        words.forEach((word, wordIndex) => {
+          if (word !== '') {
+            const wordDiv = document.createElement('div');
+            wordDiv.style.display = 'inline-block';
+            const chars = word.split('');
+            chars.forEach(char => {
+              const span = document.createElement('span');
+              span.style.visibility = 'hidden';
+              span.textContent = char;
+              span.className = 'type-char';
+              wordDiv.appendChild(span);
+            });
+            fragment.appendChild(wordDiv);
+          }
+          if (wordIndex < words.length - 1) {
+            fragment.appendChild(document.createTextNode(" "));
+          }
+        });
+        node.parentNode.replaceChild(fragment, node);
+      } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+        Array.from(node.childNodes).forEach(wrapTextNodes);
+      }
+    };
+    Array.from(el.childNodes).forEach(wrapTextNodes);
   };
 
+  const textsToType = [
+    ".one", ".two", ".three", "#chatMessage", ".idea-1", ".idea-2", ".idea-3", 
+    ".idea-4", ".idea-5", ".idea-6", "#birthdayTitle", "#wishText", "#finalMessage", ".last-smile"
+  ];
+  textsToType.forEach(setupTypewriter);
 
-  const ideaTextTransLeave = {
-    opacity: 0,
-    y: 30,
-    rotationY: 10,
-    skewX: "-10deg"
-  };
+  const tl = new TimelineMax();
 
-
-  const tl =
-    new TimelineMax();
-
-
-  // ====================================================
   // OPENING
-  // ====================================================
-
   tl
+    .to(".container", 0.2, { visibility: "visible" })
+    .staggerTo(".one .type-char", 0.05, { visibility: "visible" }, 0.03)
+    .staggerTo(".two .type-char", 0.05, { visibility: "visible" }, 0.03, "+=0.5")
+    .to(".one", 0.8, { opacity: 0, y: -40, scale: 1.05 }, "+=2.5")
+    .to(".two", 0.6, { opacity: 0, y: -20 }, "-=0.6");
 
-    .to(
-      ".container",
-      0.2,
-      {
-        visibility: "visible"
-      }
-    )
-
-    .from(
-      ".one",
-      1,
-      {
-        opacity: 0,
-        y: 40,
-        scale: 0.9,
-        ease: Power3.easeOut
-      }
-    )
-
-    .from(
-      ".two",
-      0.8,
-      {
-        opacity: 0,
-        y: 20
-      },
-      "-=0.4"
-    )
-
-    .to(
-      ".one",
-      0.8,
-      {
-        opacity: 0,
-        y: -40,
-        scale: 1.05
-      },
-      "+=2.5"
-    )
-
-    .to(
-      ".two",
-      0.6,
-      {
-        opacity: 0,
-        y: -20
-      },
-      "-=0.6"
-    );
-
-
-  // ====================================================
   // BIRTHDAY REVEAL
-  // ====================================================
-
   tl
+    .staggerTo(".three .type-char", 0.05, { visibility: "visible" }, 0.04)
+    .to(".three", 0.7, { opacity: 0, y: -40 }, "+=2.0");
 
-    .from(
-      ".three",
-      1,
-      {
-        opacity: 0,
-        scale: 0.4,
-        rotation: -8,
-        ease: Elastic.easeOut.config(1, 0.5)
-      }
-    )
-
-    .to(
-      ".three",
-      0.15,
-      {
-        scale: 1.08
-      }
-    )
-
-    .to(
-      ".three",
-      0.15,
-      {
-        scale: 1
-      }
-    )
-
-    .to(
-      ".three",
-      0.7,
-      {
-        opacity: 0,
-        y: -40
-      },
-      "+=1.7"
-    );
-
-
-  // ====================================================
   // MESSAGE CARD
-  // ====================================================
-
   tl
+    .from(".four", 0.9, { opacity: 0, scale: 0.75, y: 50, ease: Back.easeOut.config(1.5) })
+    .from(".fake-btn", 0.5, { opacity: 0, scale: 0 }, "-=0.4")
+    .staggerTo("#chatMessage .type-char", 0.04, { visibility: "visible" }, 0.025)
+    .to(".fake-btn", 0.25, { scale: 1.1, backgroundColor: "#ff8fab" })
+    .to(".fake-btn", 0.2, { scale: 1 })
+    .to(".four", 0.7, { opacity: 0, scale: 0.8, y: -80 }, "+=1.5");
 
-    .from(
-      ".four",
-      0.9,
-      {
-        opacity: 0,
-        scale: 0.75,
-        y: 50,
-        ease: Back.easeOut.config(1.5)
-      }
-    )
-
-    .from(
-      ".fake-btn",
-      0.5,
-      {
-        opacity: 0,
-        scale: 0
-      },
-      "-=0.4"
-    )
-
-    .staggerTo(
-      "#chatMessage span",
-      0.04,
-      {
-        visibility: "visible"
-      },
-      0.025
-    )
-
-    .to(
-      ".fake-btn",
-      0.25,
-      {
-        scale: 1.1,
-        backgroundColor: "#ff8fab"
-      }
-    )
-
-    .to(
-      ".fake-btn",
-      0.2,
-      {
-        scale: 1
-      }
-    )
-
-    .to(
-      ".four",
-      0.7,
-      {
-        opacity: 0,
-        scale: 0.8,
-        y: -80
-      },
-      "+=1"
-    );
-
-
-  // ====================================================
   // IDEAS
-  // ====================================================
-
+  const ideaLeave = { opacity: 0, y: 30, rotationY: 10, skewX: "-10deg" };
   tl
+    .staggerTo(".idea-1 .type-char", 0.05, { visibility: "visible" }, 0.03)
+    .to(".idea-1", 0.7, ideaLeave, "+=1.5")
+    .staggerTo(".idea-2 .type-char", 0.05, { visibility: "visible" }, 0.03)
+    .to(".idea-2", 0.7, ideaLeave, "+=1.5")
+    .staggerTo(".idea-3 .type-char", 0.05, { visibility: "visible" }, 0.03)
+    .to(".idea-3 strong", 0.5, { scale: 1.25, backgroundColor: "#ff5c8a", color: "#fff", boxShadow: "0 8px 25px rgba(255,92,138,0.3)" })
+    .to(".idea-3", 0.7, ideaLeave, "+=1.5")
+    .staggerTo(".idea-4 .type-char", 0.05, { visibility: "visible" }, 0.03)
+    .to(".idea-4", 0.7, ideaLeave, "+=1.5");
 
-    .from(
-      ".idea-1",
-      0.8,
-      ideaTextTrans
-    )
-
-    .to(
-      ".idea-1",
-      0.7,
-      ideaTextTransLeave,
-      "+=1.2"
-    )
-
-    .from(
-      ".idea-2",
-      0.8,
-      ideaTextTrans
-    )
-
-    .to(
-      ".idea-2",
-      0.7,
-      ideaTextTransLeave,
-      "+=1.2"
-    )
-
-    .from(
-      ".idea-3",
-      0.8,
-      ideaTextTrans
-    )
-
-    .to(
-      ".idea-3 strong",
-      0.5,
-      {
-        scale: 1.25,
-        backgroundColor: "#ff5c8a",
-        color: "#fff",
-        boxShadow:
-          "0 8px 25px rgba(255,92,138,0.3)"
-      }
-    )
-
-    .to(
-      ".idea-3",
-      0.7,
-      ideaTextTransLeave,
-      "+=1.2"
-    )
-
-    .from(
-      ".idea-4",
-      0.8,
-      ideaTextTrans
-    )
-
-    .to(
-      ".idea-4",
-      0.7,
-      ideaTextTransLeave,
-      "+=1.2"
-    );
-
-
-  // ====================================================
   // SPECIAL MOMENT
-  // ====================================================
-
   tl
+    .staggerTo(".idea-5 .type-char", 0.05, { visibility: "visible" }, 0.04)
+    .to(".idea-5", 0.7, { opacity: 0, scale: 0.3, rotation: 10 }, "+=2.0");
 
-    .from(
-      ".idea-5",
-      1,
-      {
-        opacity: 0,
-        scale: 0.3,
-        rotation: -15,
-        y: 80,
-        ease: Elastic.easeOut.config(1, 0.5)
-      }
-    )
-
-    .to(
-      ".idea-5",
-      0.5,
-      {
-        scale: 1.08
-      }
-    )
-
-    .to(
-      ".idea-5",
-      0.5,
-      {
-        scale: 1
-      }
-    )
-
-    .to(
-      ".idea-5",
-      0.7,
-      {
-        opacity: 0,
-        scale: 0.3,
-        rotation: 10
-      },
-      "+=1.5"
-    );
-
-
-  // ====================================================
   // SO
-  // ====================================================
-
   tl
+    .staggerTo(".idea-6 .type-char", 0.1, { visibility: "visible", scale: 1.5 }, 0.1)
+    .to(".idea-6 span", 0.7, { scale: 2.5, opacity: 0, rotation: -20 }, "+=0.8");
 
-    .staggerFrom(
-      ".idea-6 span",
-      0.8,
-      {
-        scale: 3,
-        opacity: 0,
-        rotation: 20,
-        ease: Elastic.easeOut.config(1, 0.5)
-      },
-      0.2
-    )
-
-    .staggerTo(
-      ".idea-6 span",
-      0.7,
-      {
-        scale: 2.5,
-        opacity: 0,
-        rotation: -20
-      },
-      0.15,
-      "+=0.8"
-    );
-
-
-  // ====================================================
   // BALLOONS
-  // ====================================================
-
   tl
+    .staggerFromTo(".baloons img", 3, { opacity: 0, y: 1400, rotation: -10 }, { opacity: 1, y: -1000, rotation: 10, ease: Power1.easeOut }, 0.15);
 
-    .staggerFromTo(
-      ".baloons img",
-      3,
-      {
-        opacity: 0,
-        y: 1400,
-        rotation: -10
-      },
-      {
-        opacity: 1,
-        y: -1000,
-        rotation: 10,
-        ease: Power1.easeOut
-      },
-      0.15
-    );
-
-
-  // ====================================================
   // PHOTO REVEAL
-  // ====================================================
-
   tl
+    .from(".six", 1.2, { scale: 0.4, opacity: 0, y: 100, rotationZ: -5, ease: Elastic.easeOut.config(1, 0.5) }, "-=1.8")
+    .from(".hat", 0.8, { x: -120, y: -250, rotation: -180, opacity: 0, ease: Back.easeOut.config(1.7) }, "-=0.5");
 
-    .from(
-      ".six",
-      1.2,
-      {
-        scale: 0.4,
-        opacity: 0,
-        y: 100,
-        rotationZ: -5,
-        ease: Elastic.easeOut.config(1, 0.5)
-      },
-      "-=1.8"
-    )
-
-    .from(
-      ".hat",
-      0.8,
-      {
-        x: -120,
-        y: -250,
-        rotation: -180,
-        opacity: 0,
-        ease: Back.easeOut.config(1.7)
-      },
-      "-=0.5"
-    );
-
-
-  // ====================================================
   // BIRTHDAY TITLE
-  // ====================================================
-
   tl
+    .staggerTo("#birthdayTitle .type-char", 0.05, { visibility: "visible" }, 0.04)
+    .staggerTo("#wishText .type-char", 0.05, { visibility: "visible" }, 0.03, "+=0.5");
 
-    .staggerFrom(
-      "#birthdayTitle span",
-      0.7,
-      {
-        opacity: 0,
-        y: -60,
-        rotation: 120,
-        scale: 0.4,
-        ease: Elastic.easeOut.config(1, 0.5)
-      },
-      0.07
-    )
-
-    .staggerFromTo(
-      "#birthdayTitle span",
-      0.6,
-      {
-        scale: 1.3
-      },
-      {
-        scale: 1,
-        rotationY: 0,
-        ease: Expo.easeOut
-      },
-      0.05,
-      "birthday"
-    )
-
-    .from(
-      "#wishText",
-      0.8,
-      {
-        opacity: 0,
-        y: 25,
-        skewX: "-10deg"
-      },
-      "birthday+=0.2"
-    );
-
-
-  // ====================================================
   // DECORATIVE PARTICLES
-  // ====================================================
-
   tl
+    .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 60, repeat: 2, repeatDelay: 1 }, 0.2);
 
-    .staggerTo(
-      ".eight svg",
-      1.5,
-      {
-        visibility: "visible",
-        opacity: 0,
-        scale: 60,
-        repeat: 2,
-        repeatDelay: 1
-      },
-      0.2
-    );
-
-
-  // ====================================================
   // FINAL SECTION
-  // ====================================================
-
   tl
+    .to(".six", 0.8, { opacity: 0, y: -40, scale: 0.95, visibility: "hidden" }, "+=2.5")
+    .staggerTo(".nine > p .type-char, .nine > button, .last-smile .type-char", 0.05, { visibility: "visible", opacity: 1 }, 0.03)
+    .to(".last-smile", 0.5, { rotation: 90, scale: 1.2 }, "+=0.8");
 
-    .to(
-      ".six",
-      0.8,
-      {
-        opacity: 0,
-        y: -40,
-        scale: 0.95,
-        visibility: "hidden"
-      }
-    )
-
-    .staggerFrom(
-      ".nine > *",
-      1,
-      {
-        opacity: 0,
-        y: 30,
-        scale: 0.9
-      },
-      0.4
-    )
-
-    .to(
-      ".last-smile",
-      0.5,
-      {
-        rotation: 90,
-        scale: 1.2
-      },
-      "+=0.8"
-    );
-
-
-  // ====================================================
   // REPLAY
-  // ====================================================
-
-  const replayButton =
-    document.getElementById("replay");
-
-
+  const replayButton = document.getElementById("replay");
   if (replayButton) {
-
-    replayButton.addEventListener(
-      "click",
-      () => {
-
-        tl.restart();
-
-      }
-    );
-
+    replayButton.style.opacity = 0; // ensure it is hidden at start
+    replayButton.addEventListener("click", () => {
+      tl.restart();
+    });
   }
-
 };
 
 

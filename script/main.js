@@ -203,11 +203,10 @@ const animationTimeline = () => {
   // Split message into characters
   // ----------------------------------------------------
 
+  let chatText = textBoxChars.textContent.trim();
   textBoxChars.innerHTML =
     "<span>" +
-    textBoxChars.innerHTML
-      .split("")
-      .join("</span><span>") +
+    chatText.split("").map(c => c === " " ? "&nbsp;" : c).join("</span><span>") +
     "</span>";
 
 
@@ -215,11 +214,10 @@ const animationTimeline = () => {
   // Split birthday title
   // ----------------------------------------------------
 
+  let hbdText = hbd.textContent.trim();
   hbd.innerHTML =
     "<span>" +
-    hbd.innerHTML
-      .split("")
-      .join("</span><span>") +
+    hbdText.split("").map(c => c === " " ? "&nbsp;" : c).join("</span><span>") +
     "</span>";
 
 

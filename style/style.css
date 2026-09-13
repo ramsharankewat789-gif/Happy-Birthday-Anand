@@ -568,7 +568,7 @@ body::after {
 
 @media screen and (max-width: 500px) {
   .container {
-    width: 94%;
+    width: 100%;
   }
 
   .one {

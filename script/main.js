@@ -204,10 +204,7 @@ const animationTimeline = () => {
   // ----------------------------------------------------
 
   let chatText = textBoxChars.textContent.trim();
-  textBoxChars.innerHTML =
-    "<span>" +
-    chatText.split("").map(c => c === " " ? "&nbsp;" : c).join("</span><span>") +
-    "</span>";
+  textBoxChars.innerHTML = chatText.split("").map(c => c === " " ? " " : "<span>" + c + "</span>").join("");
 
 
   // ----------------------------------------------------
@@ -215,10 +212,7 @@ const animationTimeline = () => {
   // ----------------------------------------------------
 
   let hbdText = hbd.textContent.trim();
-  hbd.innerHTML =
-    "<span>" +
-    hbdText.split("").map(c => c === " " ? "&nbsp;" : c).join("</span><span>") +
-    "</span>";
+  hbd.innerHTML = hbdText.split("").map(c => c === " " ? " " : "<span>" + c + "</span>").join("");
 
 
   const ideaTextTrans = {
